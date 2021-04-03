@@ -1,10 +1,11 @@
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         //build up a graph of connected Rooms.
-        World g = new World();
+        Level g = new Level();
+        Player p = new Player("Wally");
+
         g.addRoom("hall");
         g.addRoom("closet");
         g.addRoom("dungeon");
@@ -12,7 +13,7 @@ public class Main {
         g.addDirectedEdge("hall", "dungeon");
         g.addUndirectedEdge("hall", "closet");
 
-        World.Room current = g.getRoom("hall");
+        p.setCurrentRoom(g.getRoom("hall"));
 
         String response = "";
         Scanner in = new Scanner(System.in);
@@ -21,7 +22,7 @@ public class Main {
 
         do {
             // display room and connections, asks for next action
-            System.out.println("You are currently in the " + current.getName());
+            System.out.println("You are currently in the " + p.getCurrentRoom());
             System.out.print("What do you want to do? > ");
             response = in.nextLine();
             response = response.trim();
@@ -37,14 +38,10 @@ public class Main {
                 }
                 String roomname = words[1];
 
-                World.Room nextRoom = current.getNeighbor(roomname);
-                if (nextRoom == null){
-                    System.out.println("You can't go to " + roomname + ". Try again.");
-                } else {
-                    current = nextRoom;
-                }
+                p.moveToRoom(roomname);
+
             } else if (firstWord.equals("look")){
-                System.out.println("You can go to the: " + current.getNeighborNames());
+                System.out.println("You can go to the: " + p.getCurrentRoom().getNeighborNames());
             } else if (firstWord.equals("add")){
                 if (words.length < 3 || !words[1].equals("room")) {
                     System.out.println("Please use the following format: add room <roomname>.");
@@ -52,7 +49,7 @@ public class Main {
                 }
                 String newName = words[2];
                 g.addRoom(newName);
-                g.addUndirectedEdge(current.getName(), newName);
+                g.addUndirectedEdge(p.getCurrentRoom().getName(), newName);
             } else if (firstWord.equals("quit")) {
                 System.out.println("-------------");
                 break;
