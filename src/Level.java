@@ -2,29 +2,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class World {
-    public static final String[] commandWords = {"go", "look", "pickup"};
+public class Level {
     private HashMap<String, Room> rooms;
 
-    public World(){
+    public Level(){
         rooms = new HashMap<String, Room>();
     }
 
     public void addRoom(String name) {
+        name = name.trim();
         rooms.put(name, new Room(name));
     }
 
     public void addDirectedEdge(String name1, String name2) {
-        Room n1 = getRoom(name1);
-        Room n2 = getRoom(name2);
+        Room n1 = getRoom(name1.trim());
+        Room n2 = getRoom(name2.trim());
         if (n1 == null || n2 == null) return;
 
         n1.addNeighbor(n2);
     }
 
     public void addUndirectedEdge(String name1, String name2) {
-        Room n1 = getRoom(name1);
-        Room n2 = getRoom(name2);
+        Room n1 = getRoom(name1.trim());
+        Room n2 = getRoom(name2.trim());
         if (n1 == null || n2 == null) return;
 
         n1.addNeighbor(n2);
@@ -73,5 +73,8 @@ public class World {
             return names;
         }
 
+        public String toString() {
+            return this.name;
+        }
     }
 }
