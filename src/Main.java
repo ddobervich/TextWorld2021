@@ -22,9 +22,10 @@ public class Main {
         do {
             // display room and connections, asks for next action
             System.out.println("You are currently in the " + current.getName());
-            System.out.print("What do you want to do?");
+            System.out.print("What do you want to do? > ");
             response = in.nextLine();
-            System.out.println("*************");
+            response = response.trim();
+            System.out.println("");
 
             String[] words = response.split(" ");
             String firstWord = words[0];
