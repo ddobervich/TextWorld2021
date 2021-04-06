@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -7,6 +8,7 @@ public class Main {
 
         initRooms(g);
         initItems(g);
+        initEntities(g);
 
         Player player = new Player("Wally");
         player.setCurrentRoom(g.getRoom("hall"));
@@ -59,6 +61,7 @@ public class Main {
             } else if (firstWord.equals("look")) {
                 System.out.println("You can go to the: " + player.getCurrentRoom().getNeighborNames());
                 System.out.println("Room has items: " + player.getCurrentRoom().getItemNamesString());
+                System.out.println("Entities here: " + player.getCurrentRoom().getEntityNamesString());
             } else if (firstWord.equals("add")) {
                 if (words.length < 3 || !words[1].equals("room")) {
                     System.out.println("Please use the following format: add room <roomname>.");
@@ -75,9 +78,15 @@ public class Main {
             }
 
             System.out.println("-------------");
+
         } while (!response.equals("quit"));
 
         System.out.println("Successfully quit game.");
+    }
+
+    private static void initEntities(Level g) {
+        Chicken c = new Chicken(g.getRoom("hall"));
+
     }
 
     private static void initItems(Level g) {
