@@ -37,16 +37,49 @@ public class Level {
     public class Room {
         private String name;
         private ArrayList<Room> neighbors;
+        private ArrayList<Entity> entities;
         private ItemContainer items;
 
         private Room(String name) {
             neighbors = new ArrayList<>();
             this.name = name;
             items = new ItemContainer();
+            entities = new ArrayList<>();
         }
 
+        public void add(Entity e) { entities.add(e); }
         public void add(Item i) {
             items.add(i);
+        }
+
+        public Entity removeEntity(String name) {
+            name = name.trim();
+            int index = getIndexForEntity(name);
+            if (index == -1) return null;
+            return entities.remove(index);
+        }
+
+        private int getIndexForEntity(String name) {
+            for (int index = 0; index < entities.size(); index++) {
+                if (entities.get(index).getName().equals(name)) {
+                    return index;
+                }
+            }
+            return -1;
+        }
+
+        public boolean containsEntity(String entityName) {
+            return (getIndexForEntity(entityName) != -1);
+        }
+
+        public String getEntityNamesString() {
+            if (entities.size() == 0) return "There's no one else here.";
+
+            String out = "";
+            for (Entity i : entities) {
+                out += i.getName() + ", ";
+            }
+            return out.substring(0, out.length() - 2);
         }
 
         public Item removeItem(String name) {
@@ -94,5 +127,14 @@ public class Level {
             return this.name;
         }
 
+        public Room getRandomNeighbor() {
+            if (neighbors.size() == 0) return null;
+            int index = (int)(Math.random()*neighbors.size());
+            return neighbors.get(index);
+        }
+
+        public void removeEntity(Entity e) {
+            entities.remove(e);
+        }
     }
 }
