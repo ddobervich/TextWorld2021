@@ -1,39 +1,25 @@
-import java.util.ArrayList;
-
 public class Player {
     private String name, description;
     private Level.Room currentRoom;
-    private ArrayList<Item> inventory;
+    private ItemContainer items;
 
     public Player(String name) {
         this.name = name;
         this.description = "";
         this.currentRoom = null;
-        this.inventory = new ArrayList<>();
+        this.items = new ItemContainer();
     }
 
     public void addItem(Item i) {
-        inventory.add(i);
+        items.add(i);
     }
 
     public Item removeItem(String name) {
-        name = name.trim();
-        int index = getIndexForItem(name);
-        if (index == -1) return null;
-        return inventory.remove(index);
-    }
-
-    private int getIndexForItem(String name) {
-        for (int index = 0; index < inventory.size(); index++) {
-            if (inventory.get(index).getName().equals(name)) {
-                return index;
-            }
-        }
-        return -1;
+        return items.remove(name);
     }
 
     public boolean contains(String itemName) {
-        return (getIndexForItem(itemName) != -1);
+        return items.contains(itemName);
     }
 
     public String getName() {
@@ -70,13 +56,7 @@ public class Player {
     }
 
     public String getInvetoryString() {
-        if (inventory.size() == 0) return "You are carrying no items.";
-
-        String out = "Your items: ";
-        for (Item i : inventory) {
-            out += i.getName() + ", ";
-        }
-        return out.substring(0, out.length() - 2);
+        return items.getItemNamesString();
     }
 
     public void pickupItem(String itemName) {
@@ -96,9 +76,9 @@ public class Player {
             System.out.println("You don't have the " + itemName);
             return;
         }
-        int index = getIndexForItem(itemName);
-        Item i = inventory.remove(index);
-        getCurrentRoom().addItem(i);
+
+        Item i = items.remove(itemName);
+        getCurrentRoom().add(i);
 
         System.out.println("You dropped up the " + itemName + "!");
     }

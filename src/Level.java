@@ -4,7 +4,7 @@ import java.util.HashMap;
 public class Level {
     private HashMap<String, Room> rooms;
 
-    public Level(){
+    public Level() {
         rooms = new HashMap<String, Room>();
     }
 
@@ -37,73 +37,55 @@ public class Level {
     public class Room {
         private String name;
         private ArrayList<Room> neighbors;
-        private ArrayList<Item> inventory;
+        private ItemContainer items;
 
         private Room(String name) {
             neighbors = new ArrayList<>();
             this.name = name;
-            inventory = new ArrayList<>();
+            items = new ItemContainer();
         }
 
-        public void addItem(Item i) {
-            inventory.add(i);
+        public void add(Item i) {
+            items.add(i);
         }
 
         public Item removeItem(String name) {
-            name = name.trim();
-            int index = getIndexForItem(name);
-            if (index == -1) return null;
-            return inventory.remove(index);
-        }
-
-        private int getIndexForItem(String name) {
-            for (int index = 0; index < inventory.size(); index++) {
-                if (inventory.get(index).getName().equals(name)) {
-                    return index;
-                }
-            }
-            return -1;
+            return items.remove(name);
         }
 
         public boolean contains(String itemName) {
-            return (getIndexForItem(itemName) != -1);
+            return items.contains(itemName);
         }
 
-        public String getInvetoryString() {
-            if (inventory.size() == 0) return "Room has no items.";
-
-            String out = "";
-            for (Item i : inventory) {
-                out += i.getName() + ", ";
-            }
-            return out.substring(0, out.length() - 2);
+        public String getItemNamesString() {
+            return items.getItemNamesString();
         }
 
-        public String getName(){
+        public String getName() {
             return name;
         }
 
-        public Room getNeighbor(String name){
-            for (Room n: neighbors) {
-                if (n.getName().equals(name)){
+        public Room getNeighbor(String name) {
+            for (Room n : neighbors) {
+                if (n.getName().equals(name)) {
                     return n;
                 }
             }
             return null;
         }
 
-        private void addNeighbor(Room n){
+        private void addNeighbor(Room n) {
             neighbors.add(n);
         }
 
-        public String getNeighborNames(){
+        public String getNeighborNames() {
             if (neighbors.size() == 0) return "";
             String names = "";
-            for (int i = 0; i < neighbors.size()-1; i++) {
-                Room Room =  neighbors.get(i);
+            for (int i = 0; i < neighbors.size() - 1; i++) {
+                Room Room = neighbors.get(i);
                 names += Room.getName() + ", ";
             }
-            names += neighbors.get(neighbors.size()-1).getName() + ".";
+            names += neighbors.get(neighbors.size() - 1).getName() + ".";
 
             return names;
         }

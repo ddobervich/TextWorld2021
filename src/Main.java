@@ -58,7 +58,7 @@ public class Main {
 
             } else if (firstWord.equals("look")) {
                 System.out.println("You can go to the: " + player.getCurrentRoom().getNeighborNames());
-                System.out.println("Room has items: " + player.getCurrentRoom().getInvetoryString());
+                System.out.println("Room has items: " + player.getCurrentRoom().getItemNamesString());
             } else if (firstWord.equals("add")) {
                 if (words.length < 3 || !words[1].equals("room")) {
                     System.out.println("Please use the following format: add room <roomname>.");
@@ -85,9 +85,9 @@ public class Main {
         Item redlobster = new Item("red lobster");
         Item tenFootPole = new Item("Ten foot pole");
 
-        g.getRoom("hall").addItem(lobster);
-        g.getRoom("hall").addItem(redlobster);
-        g.getRoom("dungeon").addItem(tenFootPole);
+        g.getRoom("hall").add(lobster);
+        g.getRoom("hall").add(redlobster);
+        g.getRoom("dungeon").add(tenFootPole);
     }
 
     private static void initRooms(Level g) {
