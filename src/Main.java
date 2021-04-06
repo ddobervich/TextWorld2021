@@ -4,16 +4,12 @@ public class Main {
     public static void main(String[] args) {
         //build up a graph of connected Rooms.
         Level g = new Level();
-        Player p = new Player("Wally");
 
-        g.addRoom("hall");
-        g.addRoom("closet");
-        g.addRoom("dungeon");
+        initRooms(g);
+        initItems(g);
 
-        g.addDirectedEdge("hall", "dungeon");
-        g.addUndirectedEdge("hall", "closet");
-
-        p.setCurrentRoom(g.getRoom("hall"));
+        Player player = new Player("Wally");
+        player.setCurrentRoom(g.getRoom("hall"));
 
         String response = "";
         Scanner in = new Scanner(System.in);
@@ -22,7 +18,7 @@ public class Main {
 
         do {
             // display room and connections, asks for next action
-            System.out.println("You are currently in the " + p.getCurrentRoom());
+            System.out.println("You are currently in the " + player.getCurrentRoom());
             System.out.print("What do you want to do? > ");
             response = in.nextLine();
             response = response.trim();
@@ -31,25 +27,46 @@ public class Main {
             String[] words = response.split(" ");
             String firstWord = words[0];
 
-            if (firstWord.equals("go")){
+            if (firstWord.equals("pickup")) {
+                if (words.length < 2) {
+                    System.out.println("Please type an item name, or type \"look\" to see items in the room.");
+                    continue;
+                }
+                String itemName = response.substring( response.indexOf(" ")+1);
+
+                player.pickupItem(itemName);
+
+            } else if (firstWord.equals("drop")) {
+                if (words.length < 2) {
+                    System.out.println("Please type an item name, or type \"inventory\" to see your items.");
+                    continue;
+                }
+
+                String itemName = response.substring( response.indexOf(" ")+1);
+                player.drop(itemName);
+
+            } else if (firstWord.equals("inventory")) {
+                System.out.println(player.getInvetoryString());
+            } else if (firstWord.equals("go")) {
                 if (words.length < 2) {
                     System.out.println("Please type a room name, or type \"look\" to see rooms.");
                     continue;
                 }
                 String roomname = words[1];
 
-                p.moveToRoom(roomname);
+                player.moveToRoom(roomname);
 
-            } else if (firstWord.equals("look")){
-                System.out.println("You can go to the: " + p.getCurrentRoom().getNeighborNames());
-            } else if (firstWord.equals("add")){
+            } else if (firstWord.equals("look")) {
+                System.out.println("You can go to the: " + player.getCurrentRoom().getNeighborNames());
+                System.out.println("Room has items: " + player.getCurrentRoom().getInvetoryString());
+            } else if (firstWord.equals("add")) {
                 if (words.length < 3 || !words[1].equals("room")) {
                     System.out.println("Please use the following format: add room <roomname>.");
                     continue;
                 }
                 String newName = words[2];
                 g.addRoom(newName);
-                g.addUndirectedEdge(p.getCurrentRoom().getName(), newName);
+                g.addUndirectedEdge(player.getCurrentRoom().getName(), newName);
             } else if (firstWord.equals("quit")) {
                 System.out.println("-------------");
                 break;
@@ -58,9 +75,28 @@ public class Main {
             }
 
             System.out.println("-------------");
-        }  while (!response.equals("quit"));
+        } while (!response.equals("quit"));
 
         System.out.println("Successfully quit game.");
+    }
+
+    private static void initItems(Level g) {
+        Item lobster = new Item("lobster");
+        Item redlobster = new Item("red lobster");
+        Item tenFootPole = new Item("Ten foot pole");
+
+        g.getRoom("hall").addItem(lobster);
+        g.getRoom("hall").addItem(redlobster);
+        g.getRoom("dungeon").addItem(tenFootPole);
+    }
+
+    private static void initRooms(Level g) {
+        g.addRoom("hall");
+        g.addRoom("closet");
+        g.addRoom("dungeon");
+
+        g.addDirectedEdge("hall", "dungeon");
+        g.addUndirectedEdge("hall", "closet");
     }
 
     private static void displayCommands() {
