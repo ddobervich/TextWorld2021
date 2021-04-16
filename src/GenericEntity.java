@@ -11,6 +11,22 @@ public abstract class GenericEntity implements Entity {
     @Override
     public abstract void move();
 
+    protected Level.Room findAdjacentRoomWithPlayer() {
+        for (Level.Room neighbor : getRoom().getNeighborRooms()) {
+            if (neighbor.containsPlayer()) {
+                return neighbor;
+            }
+        }
+        return null;
+    }
+
+    protected void moveRandomly() {
+        Level.Room next = getRoom().getRandomNeighbor();
+        if (next != null) {
+            move(next);
+        }
+    }
+
     protected void move(Level.Room nextRoom) {
         if (nextRoom == null) return;
         this.currentRoom = nextRoom;

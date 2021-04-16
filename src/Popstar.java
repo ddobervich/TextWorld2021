@@ -11,20 +11,10 @@ public class Popstar extends GenericEntity {
     public void move() {
         Level.Room playerRoom = findAdjacentRoomWithPlayer();
         if (playerRoom == null) {
-            move(getRoom().getRandomNeighbor());
+            moveRandomly();
         } else {
             move(playerRoom);
         }
     }
-
-    private Level.Room findAdjacentRoomWithPlayer() {
-        for (Level.Room neighbor : getRoom().getNeighborRooms()) {
-            if (neighbor.containsPlayer()) {
-                return neighbor;
-            }
-        }
-        return null;
-    }
-
 }
 

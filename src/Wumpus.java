@@ -11,11 +11,12 @@ public class Wumpus extends GenericEntity {
 
     @Override
     public void move() {
-        Level.Room playerRoom = searchForPlayer();
+        Level.Room playerRoom = findAdjacentRoomWithPlayer();
         if (playerRoom == null) {
-            move(getRoom().getRandomNeighbor());
+            // don't move if player isn't close
+        } else if (playerRoom.equals(getRoom())) {
+            moveRandomly();             // if we're in the player's room, get out of there!
         } else {
-            // if only one room, it must have the player so don't do anything
             if (getRoom().getNeighborRooms().size() == 1) return;
 
             // Find neighbor without the player
@@ -28,14 +29,4 @@ public class Wumpus extends GenericEntity {
             move(next);
         }
     }
-
-    private Level.Room searchForPlayer() {
-        for (Level.Room neighbor : getRoom().getNeighborRooms()) {
-            if (neighbor.containsPlayer()) {
-                return neighbor;
-            }
-        }
-        return null;
-    }
-
 }
