@@ -11,8 +11,7 @@ public class Chicken extends GenericEntity {
 
     @Override
     public void move() {
-        Level.Room next = this.getRoom().getRandomNeighbor();
-        move(next);     // run safe inherited move
+        moveRandomly();
     }
 }
 
