@@ -1,11 +1,26 @@
 public abstract class GenericEntity implements Entity {
     protected String name, description;
-    protected Level.Room currentRoom;
+    private Level.Room currentRoom;
 
     public GenericEntity(String name) {
         this.name = name;
         this.description = "";
         this.currentRoom = null;
+    }
+
+    @Override
+    public abstract void move();
+
+    protected void move(Level.Room nextRoom) {
+        if (nextRoom == null) return;
+        this.currentRoom = nextRoom;
+    }
+
+    protected void setCurrentRoom(Level.Room room) {
+        if (!room.level().contains(this)) {
+            room.level().add(this);
+        }
+        this.currentRoom = room;                     // set the room for the creature
     }
 
     public void setName(String name) {
@@ -14,14 +29,6 @@ public abstract class GenericEntity implements Entity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Level.Room getCurrentRoom() {
-        return currentRoom;
-    }
-
-    public void setCurrentRoom(Level.Room currentRoom) {
-        this.currentRoom = currentRoom;
     }
 
     @Override
@@ -39,6 +46,4 @@ public abstract class GenericEntity implements Entity {
         return this.currentRoom;
     }
 
-    @Override
-    public abstract void move();
 }

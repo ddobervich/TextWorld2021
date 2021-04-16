@@ -4,14 +4,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //build up a graph of connected Rooms.
-        Level g = new Level();
+        Level graph = new Level();
 
-        initRooms(g);
-        initItems(g);
-        initEntities(g);
+        initRooms(graph);
+        initItems(graph);
+        initEntities(graph);
 
         Player player = new Player("Wally");
-        player.setCurrentRoom(g.getRoom("hall"));
+        graph.setPlayer(player);
+        player.setCurrentRoom(graph.getRoom("hall"));
 
         String response = "";
         Scanner in = new Scanner(System.in);
@@ -68,14 +69,16 @@ public class Main {
                     continue;
                 }
                 String newName = words[2];
-                g.addRoom(newName);
-                g.addUndirectedEdge(player.getCurrentRoom().getName(), newName);
+                graph.addRoom(newName);
+                graph.addUndirectedEdge(player.getCurrentRoom().getName(), newName);
             } else if (firstWord.equals("quit")) {
                 System.out.println("-------------");
                 break;
             } else {
                 displayCommands();
             }
+
+            graph.moveAllCreatures();
 
             System.out.println("-------------");
 

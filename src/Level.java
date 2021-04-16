@@ -1,16 +1,30 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class Level {
     private HashMap<String, Room> rooms;
+    private ArrayList<Entity> entities;
+    private Player player;
 
     public Level() {
+        this(null);
+    }
+
+    public Level(Player p) {
         rooms = new HashMap<String, Room>();
+        entities = new ArrayList<>();
+        this.player = player;
+    }
+
+    public void setPlayer(Player p){
+        this.player = p;
     }
 
     public void addRoom(String name) {
         name = name.trim();
-        rooms.put(name, new Room(name));
+        rooms.put(name, new Room(name, this));
     }
 
     public void addDirectedEdge(String name1, String name2) {
@@ -34,45 +48,48 @@ public class Level {
         return rooms.get(name);
     }
 
+    public void moveAllCreatures() {
+        for (Entity e : entities) {
+            e.move();
+        }
+    }
+
+    private int getIndexForEntity(String name) {
+        for (int index = 0; index < entities.size(); index++) {
+            if (entities.get(index).getName().equals(name)) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    public boolean contains(Entity entity) {
+        return entities.contains(entity);
+    }
+
+    public void add(Entity e) {
+        entities.add(e);
+    }
+
     public class Room {
         private String name;
         private ArrayList<Room> neighbors;
-        private ArrayList<Entity> entities;
         private ItemContainer items;
+        private Level level;
 
-        private Room(String name) {
+        private Room(String name, Level level) {
             neighbors = new ArrayList<>();
             this.name = name;
             items = new ItemContainer();
-            entities = new ArrayList<>();
+            this.level = level;
         }
 
-        public void add(Entity e) { entities.add(e); }
         public void add(Item i) {
             items.add(i);
         }
 
-        public Entity removeEntity(String name) {
-            name = name.trim();
-            int index = getIndexForEntity(name);
-            if (index == -1) return null;
-            return entities.remove(index);
-        }
-
-        private int getIndexForEntity(String name) {
-            for (int index = 0; index < entities.size(); index++) {
-                if (entities.get(index).getName().equals(name)) {
-                    return index;
-                }
-            }
-            return -1;
-        }
-
-        public boolean containsEntity(String entityName) {
-            return (getIndexForEntity(entityName) != -1);
-        }
-
         public String getEntityNamesString() {
+            List<Entity> entities = getEntitiesIn(this);
             if (entities.size() == 0) return "There's no one else here.";
 
             String out = "";
@@ -133,8 +150,31 @@ public class Level {
             return neighbors.get(index);
         }
 
-        public void removeEntity(Entity e) {
-            entities.remove(e);
+        public Level level() {
+            return level;
         }
+
+        public List<Room> getNeighborRooms() {
+            return Collections.unmodifiableList(neighbors);
+        }
+
+        public boolean containsPlayer() {
+            return (level.getPlayer().getCurrentRoom().equals(this));
+        }
+    }
+
+    private Player getPlayer() {
+        return player;
+    }
+
+    private List<Entity> getEntitiesIn(Room room) {
+        ArrayList<Entity> entityList = new ArrayList<>();
+        for (Entity e : entities)  {
+            if (e.getRoom().equals(room)) {
+                entityList.add(e);
+            }
+        }
+
+        return entityList;
     }
 }
