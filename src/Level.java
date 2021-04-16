@@ -84,7 +84,8 @@ public class Level {
         if (roomList.size() == 0) return null;
 
         int r = (int)(Math.random()*roomList.size());
-        return (Room) roomList.toArray()[r];
+        String roomName = (String) roomList.toArray()[r];
+        return rooms.get(roomName);
     }
 
     public void createWumpus(String roomName) {
