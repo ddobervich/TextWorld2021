@@ -103,9 +103,11 @@ public class Main {
         g.addRoom("hall");
         g.addRoom("closet");
         g.addRoom("dungeon");
+        g.addRoom("secret room");
 
         g.addDirectedEdge("hall", "dungeon");
-        g.addUndirectedEdge("hall", "closet");
+        g.addDirectedEdge("hall", "closet");
+        g.addDirectedEdge("closet", "secret room");
     }
 
     private static void displayCommands() {
