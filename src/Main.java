@@ -88,18 +88,15 @@ public class Main {
     }
 
     private static void initEntities(Level g) {
-        Chicken c = new Chicken(g.getRoom("hall"));
-
+        g.addRandomChickens(5);
+        g.createWumpus("hall");
+        g.createPopstar("dungeon");
     }
 
     private static void initItems(Level g) {
-        Item lobster = new Item("lobster");
-        Item redlobster = new Item("red lobster");
-        Item tenFootPole = new Item("Ten foot pole");
-
-        g.getRoom("hall").add(lobster);
-        g.getRoom("hall").add(redlobster);
-        g.getRoom("dungeon").add(tenFootPole);
+        g.createItem("lobster", "hall");
+        g.createItem("red lobster", "hall");
+        g.createItem("ten foot pole", "dungeon");
     }
 
     private static void initRooms(Level g) {

@@ -9,6 +9,12 @@ public class Chicken extends GenericEntity {
         setCurrentRoom(room);
     }
 
+    public Chicken(Level.Room room, String name) {
+        super(name);
+
+        setCurrentRoom(room);
+    }
+
     @Override
     public void move() {
         moveRandomly();

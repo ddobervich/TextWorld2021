@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Level {
     private HashMap<String, Room> rooms;
@@ -69,6 +66,35 @@ public class Level {
 
     public void add(Entity e) {
         entities.add(e);
+    }
+
+    public void createItem(String itemName, String roomName) {
+        Item item = new Item(itemName);
+        this.getRoom(roomName).add(item);
+    }
+
+    public void addRandomChickens(int num) {
+        for (int i = 0; i < num; i++) {
+            Chicken c = new Chicken(getRandomRoom(), "chicken "+ i);
+        }
+    }
+
+    private Room getRandomRoom() {
+        Set<String> roomList = rooms.keySet();
+        if (roomList.size() == 0) return null;
+
+        int r = (int)(Math.random()*roomList.size());
+        return (Room) roomList.toArray()[r];
+    }
+
+    public void createWumpus(String roomName) {
+        Room r = rooms.get(roomName);
+        Wumpus w = new Wumpus(r);
+    }
+
+    public void createPopstar(String roomName) {
+        Room r = rooms.get(roomName);
+        Popstar p = new Popstar(r);
     }
 
     public class Room {
