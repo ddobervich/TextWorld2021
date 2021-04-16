@@ -12,10 +12,10 @@ public class Wumpus extends GenericEntity {
     @Override
     public void move() {
         Level.Room playerRoom = findAdjacentRoomWithPlayer();
-        if (playerRoom == null) {
-            // don't move if player isn't close
-        } else if (playerRoom.equals(getRoom())) {
+        if (getRoom().containsPlayer()) {
             moveRandomly();             // if we're in the player's room, get out of there!
+        } else if (playerRoom == null) {
+            // don't do anything if the player isn't in an adjacent room
         } else {
             if (getRoom().getNeighborRooms().size() == 1) return;
 
